@@ -5,12 +5,14 @@ exports.homePage = (req, res) => {
   res.render('index');
 };
 
+// Render Add Store page
 exports.addStore = (req,res) => {
   res.render('editStore', { title: 'Add Store' });
 };
 
+// Save Store in databse
 exports.createStore = async (req, res) => {
-    const store = new Store(req.body);
-    await store.save();
-    res.redirect('/');
+    const store = await(new Store(req.body)).save();
+    req.flash('success', `Successfully Created ${store.name}. Care to leave a review?`);
+    res.redirect(`/store/${store.slug}`);
 };
